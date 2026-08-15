@@ -63,7 +63,7 @@ mkdir nfs
 sudo mount -t nfs <TARGET_IP>:/srv/nfs/onboarding nfs -o nolock
 ```
 Inside the mounted NFS directory, I explored the contents and found a PDF file containing credentials.
-![PDF]( static/images/pdf.png )
+![PDF]( /images/pdf.png )
 
 After reviewing the credentials found in the PDF, I used them to access the web application or service hosted on the target.
 
@@ -74,21 +74,21 @@ echo "TARGET_IP enigma.htb mail001.enigma.htb" | sudo tee -a /etc/hosts
 ```
 
 Using the credentials found in the PDF, I logged in as **kevin** at mail001.enigma.htb and found the following email:
-![Kevin Mail]( /static/images/kevin_mail.png )
+![Kevin Mail]( /images/kevin_mail.png )
 
 
 From this email, I also discovered the existence of another user, **sarah**.
 
 Next, I tested Kevin's password against the newly discovered sarah user on ***mail001.enigma.htb***, which resulted in a successful login And from Sarah's mailbox, we obtained new information:
 
-![Sarah Mail]( /static/images/sarah_mail.png )
+![Sarah Mail]( /images/sarah_mail.png )
 
 From the new email, I discovered a new domain. I added it to my /etc/hosts file to resolve it correctly:
 ```bash
 echo "TARGET_IP support_001.enigma.htb" | sudo tee -a /etc/hosts
 ```
 Using the acquired credentials (**admin : Ne3s4rtars78s**), I logged into support_001.enigma.htb and found an OpenSTAManager 2.9.8 instance. 
-![OpenSTAManager]( /static/images/OpenSTAManager.png )
+![OpenSTAManager]( /images/OpenSTAManager.png )
 
 
 
