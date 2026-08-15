@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Tags on CTS Writeups</title>
-		<link>http://localhost:1313/my-blog/tags/</link>
+		<link>https://Dragon-Tuncay.github.io/CTS-Writeups/tags/</link>
 		<description>Recent content in Tags on CTS Writeups</description>
 		<generator>Hugo</generator>
 		<language>en-us</language>
@@ -10,6 +10,6 @@
 		
 		
 		
-			<atom:link href="http://localhost:1313/my-blog/tags/index.xml" rel="self" type="application/rss+xml" />
+			<atom:link href="https://Dragon-Tuncay.github.io/CTS-Writeups/tags/index.xml" rel="self" type="application/rss+xml" />
 	</channel>
 </rss>

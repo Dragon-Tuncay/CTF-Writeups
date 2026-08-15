@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/my-blog/</loc>
+    <loc>https://Dragon-Tuncay.github.io/CTS-Writeups/</loc>
     <lastmod>2026-08-16T00:00:00+04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/my-blog/posts/ilk-yazim/</loc>
+    <loc>https://Dragon-Tuncay.github.io/CTS-Writeups/posts/enigma-machine/</loc>
     <lastmod>2026-08-16T00:00:00+04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/my-blog/posts/</loc>
+    <loc>https://Dragon-Tuncay.github.io/CTS-Writeups/posts/</loc>
     <lastmod>2026-08-16T00:00:00+04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/my-blog/categories/</loc>
+    <loc>https://Dragon-Tuncay.github.io/CTS-Writeups/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/my-blog/tags/</loc>
+    <loc>https://Dragon-Tuncay.github.io/CTS-Writeups/tags/</loc>
   </url>
 </urlset>
