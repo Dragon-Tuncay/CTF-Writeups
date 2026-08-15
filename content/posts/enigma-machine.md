@@ -63,7 +63,7 @@ mkdir nfs
 sudo mount -t nfs <TARGET_IP>:/srv/nfs/onboarding nfs -o nolock
 ```
 Inside the mounted NFS directory, I explored the contents and found a PDF file containing credentials.
-![PDF]( /static/images/pdf.png )
+![PDF]( static/images/pdf.png )
 
 After reviewing the credentials found in the PDF, I used them to access the web application or service hosted on the target.
 
