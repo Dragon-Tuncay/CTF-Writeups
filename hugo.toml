@@ -1,0 +1,8 @@
+baseURL = 'https://istifadeci_adin.github.io/my-blog/'
+languageCode = 'en-us'
+title = 'CTS Writeups'
+theme = 'terminal'
+
+[params]
+  defaultTheme = "dark"
+  logoText = "root@blog:~#"
