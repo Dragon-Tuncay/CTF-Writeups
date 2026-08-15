@@ -63,7 +63,7 @@ mkdir nfs
 sudo mount -t nfs <TARGET_IP>:/srv/nfs/onboarding nfs -o nolock
 ```
 Inside the mounted NFS directory, I explored the contents and found a PDF file containing credentials.
-![PDF]( /images/pdf.png )
+![PDF]( pdf.png )
 
 After reviewing the credentials found in the PDF, I used them to access the web application or service hosted on the target.
 
@@ -74,21 +74,21 @@ echo "TARGET_IP enigma.htb mail001.enigma.htb" | sudo tee -a /etc/hosts
 ```
 
 Using the credentials found in the PDF, I logged in as **kevin** at mail001.enigma.htb and found the following email:
-![Kevin Mail]( /images/kevin_mail.png )
+![Kevin Mail]( kevin_mail.png )
 
 
 From this email, I also discovered the existence of another user, **sarah**.
 
 Next, I tested Kevin's password against the newly discovered sarah user on ***mail001.enigma.htb***, which resulted in a successful login And from Sarah's mailbox, we obtained new information:
 
-![Sarah Mail]( /images/sarah_mail.png )
+![Sarah Mail]( sarah_mail.png )
 
 From the new email, I discovered a new domain. I added it to my /etc/hosts file to resolve it correctly:
 ```bash
 echo "TARGET_IP support_001.enigma.htb" | sudo tee -a /etc/hosts
 ```
 Using the acquired credentials (**admin : Ne3s4rtars78s**), I logged into support_001.enigma.htb and found an OpenSTAManager 2.9.8 instance. 
-![OpenSTAManager]( /images/OpenSTAManager.png )
+![OpenSTAManager]( OpenSTAManager.png )
 
 
 
@@ -203,7 +203,7 @@ To exploit the input field, I intercepted the request and injected the command i
 }
 ```
 # Burp Suite Request Overview
-![BurpRequest]( /images/BurpRequest.png )
+![BurpRequest]( BurpRequest.png )
 
 
 >Alternative Approach (Optional): If you'd like to experiment with different exploitation payloads, you can modify the command >injected into the db_pass parameter. For instance, instead of adding a new root user to /etc/passwd, you could assign the SUID >bit to /bin/bash or use any other preferred privilege escalation payload. This step is entirely optional and up to your >preference.
