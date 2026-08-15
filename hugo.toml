@@ -1,4 +1,4 @@
-baseURL = 'https://istifadeci_adin.github.io/my-blog/'
+baseURL = 'https://Dragon-Tuncay.github.io/CTS-Writeups/'
 languageCode = 'en-us'
 title = 'CTS Writeups'
 theme = 'terminal'
