@@ -1,6 +1,6 @@
 baseURL = 'https://Dragon-Tuncay.github.io/CTF-Writeups/'
 languageCode = 'en-us'
-title = 'CTS Writeups'
+title = 'CTF Writeups'
 theme = 'terminal'
 
 [params]
