@@ -7,10 +7,9 @@ draft: false
 
 ## Introduction
 Welcome to my writeup for **DanglingTree**,an [Medium] difficulty machine on HackTheBox. This guide is for educational purposes only. 
+In this walkthrough, we will cover the complete exploitation chain — starting from initial credential enumeration via public shares and Windows Admin Center access, moving on to Command Injection and exploiting SmarterMail (CVE-2026-23760) for account takeover. From there, we'll perform offline DPAPI decryption to retrieve user credentials, analyze Active Directory permissions using BloodHound, abuse explicit password reset rights, and finally escalate privileges to Domain Administrator via ADCS (ESC1) abuse. Let’s dive in!
 
-
-
-Nmap scani ile baslayaq 
+To begin the assessment, I started with a Nmap scan to identify open ports and services running on the target machine:
 ```
 PORT     STATE SERVICE      VERSION
 53/tcp   open  domain       Simple DNS Plus
