@@ -1,4 +1,4 @@
-baseURL = 'https://ctf-writeups-nu.vercel.app/'
+baseURL = 'https://dragon-tuncay.github.io/CTF-Writeups/'
 languageCode = 'en-us'
 title = 'CTF Writeups'
 theme = 'terminal'
