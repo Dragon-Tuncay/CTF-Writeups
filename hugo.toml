@@ -6,3 +6,4 @@ theme = 'terminal'
 [params]
   defaultTheme = "dark"
   logoText = "root@blog:~#"
+  contentTypeName = "posts"
