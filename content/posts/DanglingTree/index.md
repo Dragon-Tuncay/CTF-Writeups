@@ -12,92 +12,20 @@ Welcome to my writeup for **DanglingTree**,an [Medium] difficulty machine on Hac
 
 Nmap scani ile baslayaq 
 ```
-PORT      STATE SERVICE
-53/tcp    open  domain
-80/tcp    open  http
-88/tcp    open  kerberos-sec
-135/tcp   open  msrpc
-139/tcp   open  netbios-ssn
-389/tcp   open  ldap
-443/tcp   open  https
-445/tcp   open  microsoft-ds
-464/tcp   open  kpasswd5
-593/tcp   open  http-rpc-epmap
-636/tcp   open  ldapssl
-3268/tcp  open  globalcatLDAP
-3269/tcp  open  globalcatLDAPssl
-3389/tcp  open  ms-wbt-server
-6600/tcp  open  mshvlm
-9389/tcp  open  adws
+PORT     STATE SERVICE      VERSION
+53/tcp   open  domain       Simple DNS Plus
+80/tcp   open  http         Microsoft IIS httpd 10.0
+88/tcp   open  kerberos-sec Microsoft Windows Kerberos
+135/tcp  open  msrpc        Microsoft Windows RPC
+389/tcp  open  ldap         Microsoft Windows Active Directory LDAP
+443/tcp  open  ssl/http     Microsoft IIS httpd 10.0 (CA: danglingtree-DC-CA)
+445/tcp  open  microsoft-ds Microsoft Windows SMB
+636/tcp  open  ssl/ldap     Microsoft Windows LDAP SSL
+3268/tcp open  ldap         Global Catalog LDAP
+3269/tcp open  ssl/ldap     Global Catalog LDAP SSL
+3389/tcp open  ms-wbt-server Remote Desktop
+6600/tcp open  ssl/mshvlm   Windows Admin Center
 ```
-
-{{< details "Nmap" >}}
-```text
-PORT      STATE SERVICE       VERSION
-53/tcp    open  domain        Simple DNS Plus
-80/tcp    open  http          Microsoft IIS httpd 10.0
-|_http-title: IIS Windows Server
-| http-methods: 
-|_  Potentially risky methods: TRACE
-|_http-server-header: Microsoft-IIS/10.0
-88/tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2026-08-13 13:41:10Z)
-135/tcp   open  msrpc         Microsoft Windows RPC
-139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
-389/tcp   open  ldap          Microsoft Windows Active Directory LDAP (Domain: danglingtree.htb0., Site: Default-First-Site-Name)
-|_ssl-date: TLS randomness does not represent time
-| ssl-cert: Subject: 
-| Subject Alternative Name: DNS:dc.danglingtree.htb, DNS:danglingtree.htb, DNS:DANGLINGTREE
-| Not valid before: 2026-08-03T16:32:53
-|_Not valid after:  2106-08-03T16:32:53
-443/tcp   open  ssl/http      Microsoft IIS httpd 10.0
-|_http-title: IIS Windows Server
-| tls-alpn: 
-|_  http/1.1
-|_http-server-header: Microsoft-IIS/10.0
-| ssl-cert: Subject: commonName=danglingtree-DC-CA
-| Not valid before: 2026-03-26T05:34:19
-|_Not valid after:  2114-03-26T05:44:18
-|_ssl-date: TLS randomness does not represent time
-| http-methods: 
-|_  Potentially risky methods: TRACE
-445/tcp   open  microsoft-ds?
-464/tcp   open  kpasswd5?
-593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
-636/tcp   open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: danglingtree.htb0., Site: Default-First-Site-Name)
-| ssl-cert: Subject: 
-| Subject Alternative Name: DNS:dc.danglingtree.htb, DNS:danglingtree.htb, DNS:DANGLINGTREE
-| Not valid before: 2026-08-03T16:32:53
-|_Not valid after:  2106-08-03T16:32:53
-|_ssl-date: TLS randomness does not represent time
-3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: danglingtree.htb0., Site: Default-First-Site-Name)
-| ssl-cert: Subject: 
-| Subject Alternative Name: DNS:dc.danglingtree.htb, DNS:danglingtree.htb, DNS:DANGLINGTREE
-| Not valid before: 2026-08-03T16:32:53
-|_Not valid after:  2106-08-03T16:32:53
-|_ssl-date: TLS randomness does not represent time
-3269/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: danglingtree.htb0., Site: Default-First-Site-Name)
-| ssl-cert: Subject: 
-| Subject Alternative Name: DNS:dc.danglingtree.htb, DNS:danglingtree.htb, DNS:DANGLINGTREE
-| Not valid before: 2026-08-03T16:32:53
-|_Not valid after:  2106-08-03T16:32:53
-|_ssl-date: TLS randomness does not represent time
-3389/tcp  open  ms-wbt-server
-|_ssl-date: TLS randomness does not represent time
-| ssl-cert: Subject: commonName=dc.danglingtree.htb
-| Not valid before: 2026-03-25T05:48:29
-|_Not valid after:  2026-09-24T05:48:29
-6600/tcp  open  ssl/mshvlm?
-|_ssl-date: TLS randomness does not represent time
-| fingerprint-strings: 
-|   GetRequest: 
-|     HTTP/1.1 403 Forbidden
-|     Connection: close
-|     Date: Thu, 13 Aug 2026 13:41:27 GMT
-|     Cache-Control: no-store
-|     Cache-Control: max-age=0
-|     Pragma: no-cache
-```
-{{< /details >}}
 
 
 From the Nmap scan results, we can identify the domain name (`danglingtree.htb`) and the Domain Controller hostname (`dc.danglingtree.htb`):
