@@ -1,4 +1,4 @@
-baseURL = 'https://Dragon-Tuncay.github.io/CTS-Writeups/'
+baseURL = 'https://Dragon-Tuncay.github.io/CTF-Writeups/'
 languageCode = 'en-us'
 title = 'CTS Writeups'
 theme = 'terminal'
