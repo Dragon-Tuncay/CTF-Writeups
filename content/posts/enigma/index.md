@@ -4,6 +4,8 @@ date: 2026-08-16T00:00:00+04:00
 draft: false
 ---
 
+<!--more-->
+
 ## Introduction
 
 Welcome to my writeup for **Enigma**, a thrilling machine on HackTheBox. This writeup is for educational purposes only. In this walkthrough, we will cover the complete exploitation chain — starting from an open NFS share and email enumeration to gain initial access via an OpenSTAManager RCE (`CVE-2026-38751`). From there, we’ll perform local enumeration, crack database password hashes to pivot users, set up port forwarding with Chisel, and finally leverage a command injection vulnerability in OliveTin (`CVE-2026-27626`) to escalate privileges to root. Let’s dive in!
