@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ .Title }}</title>
-</head>
-<body>
-  <main class="post">
-    <h1>{{ .Title }}</h1>
-    <div class="post-date">{{ .Date.Format "2006-01-02" }}</div>
-    
-    <div class="post-content">
-      {{ .Content }}
-    </div>
-  </main>
-  
-  {{ partial "footer.html" . }}
-</body>
-</html>
+{{ define "main" }}
+<main class="post">
+  <h1>{{ .Title }}</h1>
+  <div class="post-date">{{ .Date.Format "2006-01-02" }}</div>
+
+  <div class="post-content">
+    {{ .Content }}
+  </div>
+</main>
+{{ end }}
