@@ -1,10 +1,11 @@
 {{ define "main" }}
-<main class="post">
-  <h1>{{ .Title }}</h1>
-  <div class="post-date">{{ .Date.Format "2006-01-02" }}</div>
-
-  <div class="post-content">
-    {{ .Content }}
-  </div>
-</main>
+  <main class="post">
+    <h1>{{ .Title }}</h1>
+    <div class="post-date">{{ .Date.Format "2006-01-02" }}</div>
+    <div class="post-separator" style="margin: 15px 0;"></div>
+    
+    <div class="post-content" style="font-family: monospace; line-height: 1.6;">
+      {{ .Content }}
+    </div>
+  </main>
 {{ end }}
